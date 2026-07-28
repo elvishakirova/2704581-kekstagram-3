@@ -1,7 +1,8 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Эльвира](https://up.htmlacademy.ru/javascript-individual/3/user/2704581).
-* Наставник: `Неизвестно`.
+* Наставник: `Андрей`.
+* Сайт: `https://elvishakirova.github.io/2704581-kekstagram-3/`.
 
 ---
 
