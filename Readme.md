@@ -2,7 +2,7 @@
 
 * Студент: [Эльвира](https://up.htmlacademy.ru/javascript-individual/3/user/2704581).
 * Наставник: `Андрей`.
-* Сайт: `https://elvishakirova.github.io/2704581-kekstagram-3/`.
+* Сайт: [Ссылка на проект](https://elvishakirova.github.io/2704581-kekstagram-3/).
 ---
 
 _Не удаляйте и не изменяйте самовольно файлы и папки:_
