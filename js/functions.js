@@ -1,8 +1,4 @@
-function checkStringLength (string, number) {
-  const length = string.length;
-  return (length < number) ? true : (length === number) ? true : (length > number) ? false : false;
-}
-
+const checkStringLength = (string, number) => string.length <= number;
 
 function isPalindrome (string) {
   const normalizedString = string.replaceAll(' ', '').toUpperCase();
@@ -12,7 +8,7 @@ function isPalindrome (string) {
     newString += normalizedString[i];
   }
 
-  return newString === normalizedString ? true : false;
+  return newString === normalizedString;
 }
 
 
@@ -21,13 +17,13 @@ function extractingInteger (parameter) {
   const normalizedParameter = parameter.toString();
 
   for (let i = 0; i < normalizedParameter.length; i++) {
-    const parsedChar = parseInt(normalizedParameter[i]);
+    const parsedChar = parseInt(normalizedParameter[i], 10);
     if (!isNaN(parsedChar)) {
       positiveString += normalizedParameter[i];
     }
   }
 
-  const positiveInteger = parseInt(positiveString);
+  const positiveInteger = parseInt(positiveString, 10);
   if (isNaN(positiveInteger)) {
     return NaN;
   } else {

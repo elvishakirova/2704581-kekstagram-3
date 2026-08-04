@@ -80,26 +80,6 @@ const getRandomArrayElement = (array) =>
 
 let currentCommentId = 1;
 
-const createComment = () => {
-  return {
-    id: currentCommentId++,
-    avatar: `img/avatar-${getRandomInteger(MIN_AVATAR_POSITION, MAX_AVATAR_POSITION)}.svg`,
-    name: getRandomArrayElement(NAMES),
-    message: createMessage(),
-  }
-};
-
-const generateComments = () => {
-  const comments = [];
-  const commentCount = getRandomInteger(MIN_COMMENTS, MAX_COMMENTS);
-
-  for (let i = 0; i < commentCount; i++) {
-    comments.push(createComment());
-  }
-
-  return comments;
-};
-
 const createMessage = () => {
   const messageCount = getRandomInteger(MIN_MESSAGE_LENGTH, MAX_MESSAGE_LENGTH);
   const firstMessage = getRandomArrayElement(MESSAGES);
@@ -115,6 +95,24 @@ const createMessage = () => {
   }
 
   return `${firstMessage} ${secondMessage}`;
+};
+
+const createComment = () => ({
+  id: currentCommentId++,
+  avatar: `img/avatar-${getRandomInteger(MIN_AVATAR_POSITION, MAX_AVATAR_POSITION)}.svg`,
+  name: getRandomArrayElement(NAMES),
+  message: createMessage(),
+});
+
+const generateComments = () => {
+  const comments = [];
+  const commentCount = getRandomInteger(MIN_COMMENTS, MAX_COMMENTS);
+
+  for (let i = 0; i < commentCount; i++) {
+    comments.push(createComment());
+  }
+
+  return comments;
 };
 
 const createPost = (_, index) => {
