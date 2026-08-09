@@ -30,3 +30,22 @@ function extractingInteger (parameter) {
     return positiveInteger;
   }
 }
+
+function getTimeInMinutes(timeString) {
+  const [hours, minutes] = timeString.split(':').map(Number);
+
+  return hours * 60 + minutes;
+}
+
+function isMeetOutOfWorkHours(dayStart, dayEnd, meetStart, meetLength) {
+  const dayStartInMinutes = getTimeInMinutes(dayStart);
+  const dayEndInMinutes = getTimeInMinutes(dayEnd);
+  const meetStartInMinutes = getTimeInMinutes(meetStart);
+  const meetEndInMinutes = meetStartInMinutes + meetLength;
+
+  return (
+    meetStartInMinutes >= dayStartInMinutes &&
+    meetEndInMinutes <= dayEndInMinutes
+  );
+}
+
