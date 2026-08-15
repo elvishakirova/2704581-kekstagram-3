@@ -1,4 +1,4 @@
-import './util.js';
-import {similarPosts} from './data.js';
+import './utils.js';
+import {similarPosts} from './posts.js';
 
 console.log(similarPosts);
