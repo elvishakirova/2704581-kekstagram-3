@@ -6,7 +6,6 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-const getRandomArrayElement = (array) =>
-  array[getRandomInteger(0, array.length - 1)];
+const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
 
 export {getRandomArrayElement, getRandomInteger};
