@@ -1,26 +1,28 @@
-import {similarPosts} from './posts.js';
+const prepareData = (data, template) => {
+  const pictureTemplate = template.cloneNode(true);
 
-const fragment = document.createDocumentFragment();
-const pictureTemplate = document.querySelector('#picture').content;
+  const pictureItem = pictureTemplate.querySelector('.picture');
+  const image = pictureItem.querySelector('.picture__img');
+  const likes = pictureTemplate.querySelector('.picture__likes');
+  const comments = pictureTemplate.querySelector('.picture__comments');
 
-// const url = picture.src;
-// const description = picture.alt;
+  image.src = data.url;
+  image.alt = data.description;
+  likes.textContent = data.likes;
+  comments.textContent = data.comments.length;
 
-function renderPictures() {
-  for (let i = 0; i < similarPosts.length; i++) {
-    const newPictureTemplate = pictureTemplate.cloneNode(true);
-    const pictureItem = newPictureTemplate.querySelector('.picture');
-    const image = pictureItem.querySelector('.picture__img');
-    const likes = newPictureTemplate.querySelector('.picture__likes');
-    const comments = newPictureTemplate.querySelector('.picture__comments');
+  return pictureTemplate;
+};
 
-    image.src = similarPosts[i].url;
-    image.alt = similarPosts[i].description;
-    likes.textContent = similarPosts[i].likes;
-    comments.textContent = similarPosts[i].comments.length;
-    fragment.appendChild(newPictureTemplate);
-  }
+function renderPictures(data) {
+  const fragment = document.createDocumentFragment();
+  const pictureTemplate = document.querySelector('#picture').content;
+
+  data.forEach((element) => {
+    fragment.appendChild(prepareData(element, pictureTemplate));
+  });
+
   document.querySelector('.pictures').appendChild(fragment);
 }
 
-export {renderPictures};
+export { renderPictures };
