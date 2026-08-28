@@ -26,7 +26,7 @@ function closeBigPicture() {
   document.body.classList.remove('modal-open');
 }
 
-closeButton.addEventListener('click', (closeBigPicture()));
+closeButton.addEventListener('click', (closeBigPicture));
 
 document.addEventListener('keydown', (evt) => {
   if (evt.key === 'Escape') {

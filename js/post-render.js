@@ -1,4 +1,5 @@
 import { openBigPicture } from './big-picture.js';
+import { similarPosts } from './posts.js';
 
 const prepareOnePost = (onePostData, template) => {
   const pictureTemplate = template.cloneNode(true);
@@ -8,9 +9,10 @@ const prepareOnePost = (onePostData, template) => {
   const likes = pictureTemplate.querySelector('.picture__likes');
   const comments = pictureTemplate.querySelector('.picture__comments');
 
-  pictureItem.href = onePostData.id;
+  image.id = onePostData.id;
   image.src = onePostData.url;
   image.alt = onePostData.description;
+
   likes.textContent = onePostData.likes;
   comments.textContent = onePostData.comments.length;
 
@@ -23,17 +25,29 @@ function renderPosts(postsData) {
 
   postsData.forEach((post) => {
     const onePostData = prepareOnePost(post, pictureTemplate);
-    const oneImage = onePostData.querySelector('.picture');
-
-    oneImage.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      openBigPicture(post);
-    });
 
     fragment.appendChild(onePostData);
   });
 
   document.querySelector('.pictures').appendChild(fragment);
 }
+
+const pictures = document.querySelector('.pictures');
+
+pictures.addEventListener('click', (evt) => {
+  evt.preventDefault();
+
+  if (evt.target.className !== 'picture__img') {
+    return;
+  }
+
+  const id = evt.target.id;
+
+  const currentPost = similarPosts.find(
+    (post) => post.id === Number(id)
+  );
+
+  openBigPicture(currentPost);
+});
 
 export { renderPosts };
