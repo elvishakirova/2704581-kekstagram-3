@@ -35,11 +35,11 @@ function renderPosts(postsData) {
 const pictures = document.querySelector('.pictures');
 
 pictures.addEventListener('click', (evt) => {
-  evt.preventDefault();
-
   if (evt.target.className !== 'picture__img') {
     return;
   }
+
+  evt.preventDefault();
 
   const id = evt.target.id;
 
