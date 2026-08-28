@@ -1,5 +1,5 @@
 import './utils.js';
 import {similarPosts} from './posts.js';
-import {renderPictures} from './picture-render.js';
+import {renderPosts} from './post-render.js';
 
-renderPictures(similarPosts);
+renderPosts(similarPosts);
