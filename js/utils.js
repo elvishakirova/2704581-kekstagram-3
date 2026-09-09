@@ -11,8 +11,6 @@ const getRandomArrayElement = (array) =>
 
 const checkStringLength = (string, number) => string.length <= number;
 
-checkStringLength('Hello', 10);
-
 function isPalindrome (string) {
   const normalizedString = string.replaceAll(' ', '').toUpperCase();
   let newString = '';
@@ -23,8 +21,6 @@ function isPalindrome (string) {
 
   return newString === normalizedString;
 }
-
-isPalindrome('А роза упала на лапу Азора');
 
 function extractingInteger (parameter) {
   let positiveString = '';
@@ -45,8 +41,6 @@ function extractingInteger (parameter) {
   }
 }
 
-extractingInteger('1a2b3c4d5e6f7g8h9i0j');
-
 function getTimeInMinutes(timeString) {
   const [hours, minutes] = timeString.split(':').map(Number);
 
@@ -65,6 +59,4 @@ function isMeetOutOfWorkHours(dayStart, dayEnd, meetStart, meetLength) {
   );
 }
 
-isMeetOutOfWorkHours('09:00', '18:00', '10:00', 60);
-
-export {getRandomArrayElement, getRandomInteger};
+export {getRandomArrayElement, getRandomInteger, checkStringLength, extractingInteger, isMeetOutOfWorkHours, isPalindrome};
