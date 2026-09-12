@@ -7,8 +7,12 @@ const description = bigPicture.querySelector('.social__caption');
 const likes = bigPicture.querySelector('.likes-count');
 
 const commentCount = bigPicture.querySelector('.social__comment-count');
-const commentTotalCount = bigPicture.querySelector('.social__comment-total-count');
-const commentTotalShownCount = bigPicture.querySelector('.social__comment-shown-count');
+const commentTotalCount = bigPicture.querySelector(
+  '.social__comment-total-count',
+);
+const commentTotalShownCount = bigPicture.querySelector(
+  '.social__comment-shown-count',
+);
 const commentLoader = bigPicture.querySelector('.comments-loader');
 const commentsContainer = document.querySelector('.social__comments');
 
@@ -37,7 +41,10 @@ function makeShowNextComments(comments) {
   let visibleComments = COMMENTS_PER_PORTION;
   return (increment = 0) => {
     visibleComments += increment;
-    const commentsPortion = comments.slice(visibleComments - COMMENTS_PER_PORTION, visibleComments);
+    const commentsPortion = comments.slice(
+      visibleComments - COMMENTS_PER_PORTION,
+      visibleComments,
+    );
 
     renderComments(commentsPortion, commentsContainer);
 
@@ -77,14 +84,20 @@ function openBigPicture(data) {
 
   showComments();
 
-  commentLoader.addEventListener('click', () => showComments(COMMENTS_PER_PORTION), { signal });
+  commentLoader.addEventListener(
+    'click',
+    () => showComments(COMMENTS_PER_PORTION),
+    { signal },
+  );
 
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      closeBigPicture();
-    }
-  },
-  { signal }
+  document.addEventListener(
+    'keydown',
+    (evt) => {
+      if (evt.key === 'Escape') {
+        closeBigPicture();
+      }
+    },
+    { signal },
   );
 
   closeButton.addEventListener('click', closeBigPicture, { signal });
