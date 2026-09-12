@@ -1,3 +1,5 @@
+import { resetImageEditor } from './image-editor.js';
+
 const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_MAX_COUNT = 5;
 
@@ -97,6 +99,7 @@ const closeImageUploadForm = () => {
   document.body.classList.remove('modal-open');
   imageUploadForm.reset();
   pristine.reset();
+  resetImageEditor();
   controller.abort();
 };
 
