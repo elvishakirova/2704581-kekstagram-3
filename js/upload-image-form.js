@@ -1,4 +1,5 @@
 import { resetImageEditor } from './image-editor.js';
+import { initializeImageFormScale, initializeImageFormEffects } from './image-editor.js';
 
 const COMMENT_MAX_LENGTH = 140;
 const HashtagRequirements = {
@@ -140,6 +141,9 @@ const openImageUploadForm = () => {
     },
     { signal },
   );
+
+  initializeImageFormScale({ signal });
+  initializeImageFormEffects({ signal });
 };
 
 imageUploadInput.addEventListener('change', openImageUploadForm);
