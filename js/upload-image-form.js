@@ -1,7 +1,11 @@
 import { resetImageEditor } from './image-editor.js';
 
 const COMMENT_MAX_LENGTH = 140;
-const HASHTAG_MAX_COUNT = 5;
+const HashtagRequirements = {
+  MAX_LENGTH: 19,
+  MIN_LENGTH: 1,
+  MAX_COUNT: 5,
+};
 
 const imageUploadForm = document.querySelector('.img-upload__form');
 const imageUploadInput = imageUploadForm.querySelector('.img-upload__input');
@@ -39,7 +43,7 @@ const getHashtags = (value) => {
 };
 
 const validateHashtagsFormat = (value) => {
-  const hashtagPattern = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+  const hashtagPattern = new RegExp(`^#[A-Za-zА-Яа-яЁё0-9]{${HashtagRequirements.MIN_LENGTH},${HashtagRequirements.MAX_LENGTH}}$`);
   const { hashtags } = getHashtags(value);
 
   for (const hashtag of hashtags) {
@@ -51,10 +55,10 @@ const validateHashtagsFormat = (value) => {
   return true;
 };
 
-const validateHasgtagsCount = (value) => {
+const validateHashtagsCount = (value) => {
   const { uniqueHashtags } = getHashtags(value);
 
-  if (uniqueHashtags.size > HASHTAG_MAX_COUNT) {
+  if (uniqueHashtags.size > HashtagRequirements.MAX_COUNT) {
     return false;
   }
 
@@ -80,8 +84,8 @@ pristine.addValidator(
 
 pristine.addValidator(
   hashtagField,
-  validateHasgtagsCount,
-  `Хэштегов не может быть больше ${HASHTAG_MAX_COUNT}`,
+  validateHashtagsCount,
+  `Хэштегов не может быть больше ${HashtagRequirements.MAX_COUNT}`,
   5,
 );
 
