@@ -14,6 +14,10 @@ const imageEffectSliderContainer = document.querySelector(
 const imageEffectSlider = document.querySelector('.effect-level__slider');
 const effectsList = document.querySelector('.effects__list');
 
+const setImageUploadPreviewStyle = (style = '', property = 'filter') => {
+  imageUploadPreview.style[property] = style;
+};
+
 const updateScale = (scale) => {
   scaleControlValue.value = `${scale}%`;
   imageUploadPreview.style.transform = `scale(${scale / 100})`;
@@ -25,15 +29,19 @@ const initializeImageFormScale = ({ signal }) => {
     (evt) => {
       const currentScale = parseInt(scaleControlValue.value, 10);
       if (evt.target.classList.contains('scale__control--smaller')) {
-        if (currentScale > RANGE_SCALE_MIN) {
-          updateScale(currentScale - RANGE_SCALE_STEP);
+        if (currentScale <= RANGE_SCALE_MIN) {
+          return;
         }
+
+        updateScale(currentScale - RANGE_SCALE_STEP);
       }
 
       if (evt.target.classList.contains('scale__control--bigger')) {
-        if (currentScale < RANGE_SCALE_MAX) {
-          updateScale(currentScale + RANGE_SCALE_STEP);
+        if (currentScale >= RANGE_SCALE_MAX) {
+          return;
         }
+
+        updateScale(currentScale + RANGE_SCALE_STEP);
       }
     },
     { signal },
@@ -42,7 +50,9 @@ const initializeImageFormScale = ({ signal }) => {
   updateScale(RANGE_SCALE_START);
 };
 
-effectLevelValue.value = 0;
+const setEffectLevelValue = (value = 0) => {
+  effectLevelValue.value = value;
+};
 
 noUiSlider.create(imageEffectSlider, {
   range: {
@@ -54,40 +64,45 @@ noUiSlider.create(imageEffectSlider, {
   connect: 'lower',
 });
 
-imageEffectSliderContainer.classList.add('hidden');
-imageUploadPreview.style.filter = '';
-
 imageEffectSlider.noUiSlider.on('update', () => {
   const value = imageEffectSlider.noUiSlider.get();
   const currentEffect = document.querySelector('.effects__radio:checked').value;
 
-  effectLevelValue.value = value;
+  setEffectLevelValue(value);
 
   switch (currentEffect) {
     case 'chrome':
-      imageUploadPreview.style.filter = `grayscale(${value})`;
+      setImageUploadPreviewStyle(`grayscale(${value})`);
       break;
 
     case 'sepia':
-      imageUploadPreview.style.filter = `sepia(${value})`;
+      setImageUploadPreviewStyle(`sepia(${value})`);
       break;
 
     case 'marvin':
-      imageUploadPreview.style.filter = `invert(${value}%)`;
+      setImageUploadPreviewStyle(`invert(${value}%)`);
       break;
 
     case 'phobos':
-      imageUploadPreview.style.filter = `blur(${value}px)`;
+      setImageUploadPreviewStyle(`blur(${value}px)`);
       break;
 
     case 'heat':
-      imageUploadPreview.style.filter = `brightness(${value})`;
+      setImageUploadPreviewStyle(`brightness(${value})`);
       break;
 
     default:
-      imageUploadPreview.style.filter = '';
+      setImageUploadPreviewStyle();
   }
 });
+
+const toggleImageEffectSliderContainer = (on = false) => {
+  if (on) {
+    imageEffectSliderContainer.classList.remove('hidden');
+  } else {
+    imageEffectSliderContainer.classList.add('hidden');
+  }
+};
 
 const initializeImageFormEffects = ({ signal }) => {
   effectsList.addEventListener(
@@ -95,11 +110,7 @@ const initializeImageFormEffects = ({ signal }) => {
     (evt) => {
       const effect = evt.target.value;
 
-      if (effect === 'none') {
-        imageEffectSliderContainer.classList.add('hidden');
-      } else {
-        imageEffectSliderContainer.classList.remove('hidden');
-      }
+      toggleImageEffectSliderContainer(effect !== 'none');
 
       switch (effect) {
         case 'chrome':
@@ -156,12 +167,20 @@ const initializeImageFormEffects = ({ signal }) => {
   );
 };
 
-const resetImageEditor = () => {
-  updateScale(RANGE_SCALE_START);
-  imageUploadPreview.style.filter = '';
-  effectLevelValue.value = 0;
-  document.querySelector('.effects__radio[value="none"]').checked = true;
-  imageEffectSliderContainer.classList.add('hidden');
+const initializeImageEditorForm = ({ signal }) => {
+  toggleImageEffectSliderContainer();
+  setImageUploadPreviewStyle();
+  setEffectLevelValue();
+  initializeImageFormScale({ signal });
+  initializeImageFormEffects({ signal });
 };
 
-export { initializeImageFormScale, resetImageEditor, initializeImageFormEffects };
+const resetImageEditor = () => {
+  updateScale(RANGE_SCALE_START);
+  setImageUploadPreviewStyle();
+  setEffectLevelValue();
+  document.querySelector('.effects__radio[value="none"]').checked = true;
+  toggleImageEffectSliderContainer();
+};
+
+export { resetImageEditor, initializeImageEditorForm };
