@@ -1,4 +1,6 @@
 import { resetImageEditor, initializeImageEditorForm } from './image-editor.js';
+import { sendData } from './api.js';
+import { showSuccessMessage, showErrorMessage } from './form-messages.js';
 
 const COMMENT_MAX_LENGTH = 140;
 const HashtagRequirements = {
@@ -15,6 +17,8 @@ const closeButton = imageUploadForm.querySelector('.img-upload__cancel');
 const commentField = imageUploadForm.querySelector('.text__description');
 
 const hashtagField = imageUploadForm.querySelector('.text__hashtags');
+
+const submitButton = imageUploadForm.querySelector('.img-upload__submit');
 
 const pristine = new Pristine(imageUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -107,6 +111,21 @@ const closeImageUploadForm = () => {
   controller.abort();
 };
 
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
 const openImageUploadForm = () => {
   controller = new AbortController();
   const { signal } = controller;
@@ -119,9 +138,21 @@ const openImageUploadForm = () => {
   imageUploadForm.addEventListener(
     'submit',
     (evt) => {
+      evt.preventDefault();
       const isValid = pristine.validate();
-      if (!isValid) {
-        evt.preventDefault();
+
+      if (isValid) {
+        blockSubmitButton();
+        const formData = new FormData(imageUploadForm);
+        sendData(formData)
+          .then(() => {
+            closeImageUploadForm();
+            showSuccessMessage();
+          })
+          .catch(() => {
+            showErrorMessage();
+          })
+          .finally(unblockSubmitButton);
       }
     },
     { signal },
@@ -130,9 +161,11 @@ const openImageUploadForm = () => {
   document.addEventListener(
     'keydown',
     (evt) => {
+      const errorMessage = document.querySelector('.error');
       if (
         document.activeElement !== commentField &&
         document.activeElement !== hashtagField &&
+        !errorMessage &&
         evt.key === 'Escape'
       ) {
         closeImageUploadForm();
@@ -145,3 +178,4 @@ const openImageUploadForm = () => {
 };
 
 imageUploadInput.addEventListener('change', openImageUploadForm);
+
