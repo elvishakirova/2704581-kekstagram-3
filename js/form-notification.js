@@ -16,11 +16,11 @@ const showDataError = () => {
   }, ALERT_SHOW_TIME);
 };
 
-let controller;
+let successMessageController;
 
 const showSuccessMessage = () => {
-  controller = new AbortController();
-  const { signal } = controller;
+  successMessageController = new AbortController();
+  const { signal } = successMessageController;
 
   const successMessage = successTemplate
     .content
@@ -33,7 +33,7 @@ const showSuccessMessage = () => {
 
   const closeSuccessMessage = () => {
     successMessage.remove();
-    controller.abort();
+    successMessageController.abort();
   };
 
   successButton.addEventListener('click', closeSuccessMessage, { signal });
@@ -55,9 +55,11 @@ const showSuccessMessage = () => {
   );
 };
 
+let errorMessageController;
+
 const showErrorMessage = () => {
-  controller = new AbortController();
-  const { signal } = controller;
+  errorMessageController = new AbortController();
+  const { signal } = errorMessageController;
 
   const errorMessage = errorTemplate
     .content
@@ -70,7 +72,7 @@ const showErrorMessage = () => {
 
   const closeErrorMessage = () => {
     errorMessage.remove();
-    controller.abort();
+    errorMessageController.abort();
   };
 
   errorButton.addEventListener('click', closeErrorMessage, { signal });

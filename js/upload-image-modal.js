@@ -1,6 +1,6 @@
 import { resetImageEditor, initializeImageEditorForm } from './image-editor.js';
 import { sendData } from './api.js';
-import { showSuccessMessage, showErrorMessage } from './form-messages.js';
+import { showSuccessMessage, showErrorMessage } from './form-notification.js';
 
 const COMMENT_MAX_LENGTH = 140;
 const HashtagRequirements = {
@@ -126,6 +126,27 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
+const handleSubmitForm = (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+
+  if (!isValid) {
+    return;
+  }
+
+  blockSubmitButton();
+  const formData = new FormData(imageUploadForm);
+  sendData(formData)
+    .then(() => {
+      closeImageUploadForm();
+      showSuccessMessage();
+    })
+    .catch(() => {
+      showErrorMessage();
+    })
+    .finally(unblockSubmitButton);
+};
+
 const openImageUploadForm = () => {
   controller = new AbortController();
   const { signal } = controller;
@@ -134,29 +155,7 @@ const openImageUploadForm = () => {
   document.body.classList.add('modal-open');
 
   closeButton.addEventListener('click', closeImageUploadForm, { signal });
-
-  imageUploadForm.addEventListener(
-    'submit',
-    (evt) => {
-      evt.preventDefault();
-      const isValid = pristine.validate();
-
-      if (isValid) {
-        blockSubmitButton();
-        const formData = new FormData(imageUploadForm);
-        sendData(formData)
-          .then(() => {
-            closeImageUploadForm();
-            showSuccessMessage();
-          })
-          .catch(() => {
-            showErrorMessage();
-          })
-          .finally(unblockSubmitButton);
-      }
-    },
-    { signal },
-  );
+  imageUploadForm.addEventListener('submit', handleSubmitForm, { signal });
 
   document.addEventListener(
     'keydown',
