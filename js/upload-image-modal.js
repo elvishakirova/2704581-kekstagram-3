@@ -1,12 +1,16 @@
 import { resetImageEditor, initializeImageEditorForm } from './image-editor.js';
 import { sendData } from './api.js';
 import { showSuccessMessage, showErrorMessage } from './form-notification.js';
-import { validateForm, resetValidation, isTextFieldFocused } from './form-validation.js';
+import {
+  validateForm,
+  resetValidation,
+  isTextFieldFocused,
+} from './form-validation.js';
 
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
-  SENDING: 'Публикую...'
+  SENDING: 'Публикую...',
 };
 
 const imageUploadForm = document.querySelector('.img-upload__form');
@@ -48,6 +52,10 @@ const closeImageUploadForm = () => {
   controller.abort();
 };
 
+const closeButtonClickHandler = () => {
+  closeImageUploadForm();
+};
+
 const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = SubmitButtonText.SENDING;
@@ -58,7 +66,7 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-const onImageUploadFormSubmit = (evt) => {
+const imageUploadFormSubmitHandler = (evt) => {
   evt.preventDefault();
   const isValid = validateForm();
 
@@ -79,23 +87,21 @@ const onImageUploadFormSubmit = (evt) => {
     .finally(unblockSubmitButton);
 };
 
-const openImageUploadForm = () => {
+const imageUploadInputChangeHandler = () => {
   controller = new AbortController();
   const { signal } = controller;
 
-  closeButton.addEventListener('click', closeImageUploadForm, { signal });
-  imageUploadForm.addEventListener('submit', onImageUploadFormSubmit, { signal });
+  closeButton.addEventListener('click', closeButtonClickHandler, { signal });
+  imageUploadForm.addEventListener('submit', imageUploadFormSubmitHandler, {
+    signal,
+  });
 
   document.addEventListener(
     'keydown',
     (evt) => {
       const errorMessage = document.querySelector('.error');
-      if (
-        !isTextFieldFocused() &&
-        !errorMessage &&
-        evt.key === 'Escape'
-      ) {
-        closeImageUploadForm();
+      if (!isTextFieldFocused() && !errorMessage && evt.key === 'Escape') {
+        closeButtonClickHandler();
       }
     },
     { signal },
@@ -108,6 +114,4 @@ const openImageUploadForm = () => {
   document.body.classList.add('modal-open');
 };
 
-imageUploadInput.addEventListener('change', openImageUploadForm);
-
-
+imageUploadInput.addEventListener('change', imageUploadInputChangeHandler);

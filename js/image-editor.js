@@ -10,7 +10,9 @@ const scaleControlValue = document.querySelector('.scale__control--value');
 const imageUploadPreview = document.querySelector('.img-upload__preview img');
 
 const effectLevelValue = document.querySelector('.effect-level__value');
-const imageEffectSliderContainer = document.querySelector('.img-upload__effect-level');
+const imageEffectSliderContainer = document.querySelector(
+  '.img-upload__effect-level',
+);
 const imageEffectSlider = document.querySelector('.effect-level__slider');
 const effectsList = document.querySelector('.effects__list');
 
@@ -108,12 +110,8 @@ imageEffectSlider.noUiSlider.on('update', () => {
   }
 });
 
-const toggleImageEffectSliderContainer = (on = false) => {
-  if (on) {
-    imageEffectSliderContainer.classList.remove('hidden');
-  } else {
-    imageEffectSliderContainer.classList.add('hidden');
-  }
+const toggleImageEffectSliderContainer = (isVisible = false) => {
+  imageEffectSliderContainer.classList.toggle('hidden', !isVisible);
 };
 
 const initializeImageFormEffects = ({ signal }) => {

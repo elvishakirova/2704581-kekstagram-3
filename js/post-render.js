@@ -31,7 +31,7 @@ const renderPosts = (postsData) => {
   picturesContainer.appendChild(fragment);
 };
 
-const initPostClickHandler = (posts) => {
+const initPostClick = (posts) => {
   picturesContainer.addEventListener('click', (evt) => {
     if (evt.target.className !== 'picture__img') {
       return;
@@ -46,4 +46,4 @@ const initPostClickHandler = (posts) => {
   });
 };
 
-export { renderPosts, initPostClickHandler };
+export { renderPosts, initPostClick };

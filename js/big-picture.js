@@ -1,14 +1,18 @@
 const COMMENTS_PER_PORTION = 5;
 
 const bigPicture = document.querySelector('.big-picture');
-const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
+const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
 const description = bigPicture.querySelector('.social__caption');
 
 const likes = bigPicture.querySelector('.likes-count');
 
 const commentCount = bigPicture.querySelector('.social__comment-count');
-const commentTotalCount = bigPicture.querySelector('.social__comment-total-count');
-const commentTotalShownCount = bigPicture.querySelector('.social__comment-shown-count');
+const commentTotalCount = bigPicture.querySelector(
+  '.social__comment-total-count',
+);
+const commentTotalShownCount = bigPicture.querySelector(
+  '.social__comment-shown-count',
+);
 const commentLoader = bigPicture.querySelector('.comments-loader');
 const commentsContainer = document.querySelector('.social__comments');
 
@@ -61,11 +65,15 @@ const closeBigPicture = () => {
   controller.abort();
 };
 
+const closeButtonClickHandler = () => {
+  closeBigPicture();
+};
+
 const openBigPicture = (data) => {
   controller = new AbortController();
   const { signal } = controller;
 
-  bigPictureImg.src = data.url;
+  bigPictureImage.src = data.url;
   likes.textContent = data.likes;
   description.textContent = data.description;
   commentTotalCount.textContent = data.comments.length;
@@ -96,7 +104,7 @@ const openBigPicture = (data) => {
     { signal },
   );
 
-  closeButton.addEventListener('click', closeBigPicture, { signal });
+  closeButton.addEventListener('click', closeButtonClickHandler, { signal });
 };
 
 export { openBigPicture };

@@ -23,7 +23,9 @@ const initFilters = (posts) => {
       return;
     }
 
-    const activeButton = filtersForm.querySelector('.img-filters__button--active');
+    const activeButton = filtersForm.querySelector(
+      '.img-filters__button--active',
+    );
     activeButton.classList.remove('img-filters__button--active');
     evt.target.classList.add('img-filters__button--active');
 
@@ -38,12 +40,15 @@ const initFilters = (posts) => {
         break;
 
       case 'filter-random':
-        filteredPosts = posts.toSorted(sortRandomly).slice(0, RANDOM_POST_AMOUNT);
+        filteredPosts = posts
+          .toSorted(sortRandomly)
+          .slice(0, RANDOM_POST_AMOUNT);
         break;
 
       case 'filter-discussed':
         filteredPosts = posts.toSorted(
-          (firstPost, secondPost) => secondPost.comments.length - firstPost.comments.length,
+          (firstPost, secondPost) =>
+            secondPost.comments.length - firstPost.comments.length,
         );
         break;
     }

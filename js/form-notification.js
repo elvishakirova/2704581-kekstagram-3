@@ -5,8 +5,7 @@ const successTemplate = document.querySelector('#success');
 const errorTemplate = document.querySelector('#error');
 
 const showDataError = () => {
-  const alertContainer = dataErrorTemplate
-    .content
+  const alertContainer = dataErrorTemplate.content
     .querySelector('.data-error')
     .cloneNode(true);
   document.body.append(alertContainer);
@@ -16,14 +15,11 @@ const showDataError = () => {
   }, ALERT_SHOW_TIME);
 };
 
-let controller;
 const showMessage = (template, messageClass, buttonClass, innerClass) => {
-  controller = new AbortController();
+  const controller = new AbortController();
   const { signal } = controller;
 
-  const message = template.content
-    .querySelector(messageClass)
-    .cloneNode(true);
+  const message = template.content.querySelector(messageClass).cloneNode(true);
   document.body.append(message);
 
   const button = message.querySelector(buttonClass);
@@ -34,22 +30,30 @@ const showMessage = (template, messageClass, buttonClass, innerClass) => {
     controller.abort();
   };
 
-  button.addEventListener('click', closeMessage, { signal });
+  const messageButtonClickHandler = () => {
+    closeMessage();
+  };
 
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      closeMessage();
-    }
-  },
-  { signal },
+  button.addEventListener('click', messageButtonClickHandler, { signal });
+
+  document.addEventListener(
+    'keydown',
+    (evt) => {
+      if (evt.key === 'Escape') {
+        closeMessage();
+      }
+    },
+    { signal },
   );
 
-  document.addEventListener('click', (evt) => {
-    if (!messageContainer.contains(evt.target)) {
-      closeMessage();
-    }
-  },
-  { signal },
+  document.addEventListener(
+    'click',
+    (evt) => {
+      if (!messageContainer.contains(evt.target)) {
+        closeMessage();
+      }
+    },
+    { signal },
   );
 };
 
@@ -63,12 +67,7 @@ const showSuccessMessage = () => {
 };
 
 const showErrorMessage = () => {
-  showMessage(
-    errorTemplate,
-    '.error',
-    '.error__button',
-    '.error__inner',
-  );
+  showMessage(errorTemplate, '.error', '.error__button', '.error__inner');
 };
 
 export { showDataError, showSuccessMessage, showErrorMessage };

@@ -5,10 +5,15 @@ const HashtagRequirements = {
   MAX_COUNT: 5,
 };
 
+const ValidationPriority = {
+  FORMAT: 10,
+  COUNT: 5,
+  UNIQUENESS: 1,
+};
+
 const imageUploadForm = document.querySelector('.img-upload__form');
 const commentField = imageUploadForm.querySelector('.text__description');
 const hashtagField = imageUploadForm.querySelector('.text__hashtags');
-
 
 const pristine = new Pristine(imageUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -37,16 +42,14 @@ const getHashtags = (value) => {
 };
 
 const validateHashtagsFormat = (value) => {
-  const hashtagPattern = new RegExp(`^#[A-Za-zА-Яа-яЁё0-9]{${HashtagRequirements.MIN_LENGTH},${HashtagRequirements.MAX_LENGTH}}$`);
+  const hashtagPattern = new RegExp(
+    `^#[A-Za-zА-Яа-яЁё0-9]{${HashtagRequirements.MIN_LENGTH},${HashtagRequirements.MAX_LENGTH}}$`,
+  );
   const { hashtags } = getHashtags(value);
 
-  for (const hashtag of hashtags) {
-    if (!hashtagPattern.test(hashtag)) {
-      return false;
-    }
-  }
-
-  return true;
+  return hashtags.every((hashtag) =>
+    hashtagPattern.test(hashtag)
+  );
 };
 
 const validateHashtagsCount = (value) => {
@@ -65,21 +68,21 @@ pristine.addValidator(
   hashtagField,
   validateHashtagsFormat,
   'Хэштег должен начинаться с символа #, содержать только буквы и цифры, и быть не длиннее 20 символов',
-  10,
+  ValidationPriority.FORMAT,
 );
 
 pristine.addValidator(
   hashtagField,
   validateHashtagsCount,
   `Хэштегов не может быть больше ${HashtagRequirements.MAX_COUNT}`,
-  5,
+  ValidationPriority.COUNT,
 );
 
 pristine.addValidator(
   hashtagField,
   validateHashtagsDoubleness,
   'Хэштеги не должны повторяться',
-  1,
+  ValidationPriority.UNIQUENESS,
 );
 
 const validateForm = () => pristine.validate();
