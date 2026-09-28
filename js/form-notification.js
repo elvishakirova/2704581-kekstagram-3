@@ -5,8 +5,7 @@ const successTemplate = document.querySelector('#success');
 const errorTemplate = document.querySelector('#error');
 
 const showDataError = () => {
-  const alertContainer = dataErrorTemplate
-    .content
+  const alertContainer = dataErrorTemplate.content
     .querySelector('.data-error')
     .cloneNode(true);
   document.body.append(alertContainer);
@@ -16,82 +15,59 @@ const showDataError = () => {
   }, ALERT_SHOW_TIME);
 };
 
-let successMessageController;
+const showMessage = (template, messageClass, buttonClass, innerClass) => {
+  const controller = new AbortController();
+  const { signal } = controller;
 
-const showSuccessMessage = () => {
-  successMessageController = new AbortController();
-  const { signal } = successMessageController;
+  const message = template.content.querySelector(messageClass).cloneNode(true);
+  document.body.append(message);
 
-  const successMessage = successTemplate
-    .content
-    .querySelector('.success')
-    .cloneNode(true);
-  document.body.append(successMessage);
+  const button = message.querySelector(buttonClass);
+  const messageContainer = message.querySelector(innerClass);
 
-  const successButton = successMessage.querySelector('.success__button');
-  const successMessageContainer = successMessage.querySelector('.success__inner');
-
-  const closeSuccessMessage = () => {
-    successMessage.remove();
-    successMessageController.abort();
+  const closeMessage = () => {
+    message.remove();
+    controller.abort();
   };
 
-  successButton.addEventListener('click', closeSuccessMessage, { signal });
+  const messageButtonClickHandler = () => {
+    closeMessage();
+  };
 
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      closeSuccessMessage();
-    }
-  },
-  { signal },
+  button.addEventListener('click', messageButtonClickHandler, { signal });
+
+  document.addEventListener(
+    'keydown',
+    (evt) => {
+      if (evt.key === 'Escape') {
+        closeMessage();
+      }
+    },
+    { signal },
   );
 
-  document.addEventListener('click', (evt) => {
-    if (!successMessageContainer.contains(evt.target)) {
-      closeSuccessMessage();
-    }
-  },
-  { signal },
+  document.addEventListener(
+    'click',
+    (evt) => {
+      if (!messageContainer.contains(evt.target)) {
+        closeMessage();
+      }
+    },
+    { signal },
   );
 };
 
-let errorMessageController;
+const showSuccessMessage = () => {
+  showMessage(
+    successTemplate,
+    '.success',
+    '.success__button',
+    '.success__inner',
+  );
+};
 
 const showErrorMessage = () => {
-  errorMessageController = new AbortController();
-  const { signal } = errorMessageController;
-
-  const errorMessage = errorTemplate
-    .content
-    .querySelector('.error')
-    .cloneNode(true);
-  document.body.append(errorMessage);
-
-  const errorButton = errorMessage.querySelector('.error__button');
-  const errorMessageContainer = errorMessage.querySelector('.error__inner');
-
-  const closeErrorMessage = () => {
-    errorMessage.remove();
-    errorMessageController.abort();
-  };
-
-  errorButton.addEventListener('click', closeErrorMessage, { signal });
-
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      closeErrorMessage();
-    }
-  },
-  { signal },
-  );
-
-  document.addEventListener('click', (evt) => {
-    if (!errorMessageContainer.contains(evt.target)) {
-      closeErrorMessage();
-    }
-  },
-  { signal },
-  );
+  showMessage(errorTemplate, '.error', '.error__button', '.error__inner');
 };
 
 export { showDataError, showSuccessMessage, showErrorMessage };

@@ -1,7 +1,7 @@
 const COMMENTS_PER_PORTION = 5;
 
 const bigPicture = document.querySelector('.big-picture');
-const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
+const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
 const description = bigPicture.querySelector('.social__caption');
 
 const likes = bigPicture.querySelector('.likes-count');
@@ -18,7 +18,7 @@ const commentsContainer = document.querySelector('.social__comments');
 
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 
-function renderComments(commentsData, container) {
+const renderComments = (commentsData, container) => {
   commentsData.forEach((oneComment) => {
     const comment = document.createElement('li');
     comment.classList.add('social__comment');
@@ -35,9 +35,9 @@ function renderComments(commentsData, container) {
     comment.append(avatar, message);
     container.appendChild(comment);
   });
-}
+};
 
-function makeShowNextComments(comments) {
+const makeShowNextComments = (comments) => {
   let visibleComments = COMMENTS_PER_PORTION;
   return (increment = 0) => {
     visibleComments += increment;
@@ -55,7 +55,7 @@ function makeShowNextComments(comments) {
       commentTotalShownCount.textContent = visibleComments;
     }
   };
-}
+};
 
 let controller;
 
@@ -65,11 +65,15 @@ const closeBigPicture = () => {
   controller.abort();
 };
 
-function openBigPicture(data) {
+const closeButtonClickHandler = () => {
+  closeBigPicture();
+};
+
+const openBigPicture = (data) => {
   controller = new AbortController();
   const { signal } = controller;
 
-  bigPictureImg.src = data.url;
+  bigPictureImage.src = data.url;
   likes.textContent = data.likes;
   description.textContent = data.description;
   commentTotalCount.textContent = data.comments.length;
@@ -100,7 +104,7 @@ function openBigPicture(data) {
     { signal },
   );
 
-  closeButton.addEventListener('click', closeBigPicture, { signal });
-}
+  closeButton.addEventListener('click', closeButtonClickHandler, { signal });
+};
 
 export { openBigPicture };
