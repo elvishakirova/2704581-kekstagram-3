@@ -185,7 +185,7 @@ const initializeImageEditorForm = ({ signal }) => {
   initializeImageFormEffects({ signal });
 };
 
-const resetImageEditor = () => {
+const resetImageEditorForm = () => {
   updateScale(ScaleRequirements.START);
   setImageUploadPreviewStyle();
   setEffectLevelValue();
@@ -193,4 +193,4 @@ const resetImageEditor = () => {
   toggleImageEffectSliderContainer();
 };
 
-export { resetImageEditor, initializeImageEditorForm };
+export { resetImageEditorForm, initializeImageEditorForm };

@@ -1,4 +1,4 @@
-import { resetImageEditor, initializeImageEditorForm } from './image-editor.js';
+import { resetImageEditorForm, initializeImageEditorForm } from './image-editor.js';
 import { sendData } from './api.js';
 import { showSuccessMessage, showErrorMessage } from './form-notification.js';
 import {
@@ -48,7 +48,7 @@ const closeImageUploadForm = () => {
   document.body.classList.remove('modal-open');
   imageUploadForm.reset();
   resetValidation();
-  resetImageEditor();
+  resetImageEditorForm();
   controller.abort();
 };
 
