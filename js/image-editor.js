@@ -5,6 +5,8 @@ const ScaleRequirements = {
   START: 100,
 };
 
+const EFFECT_OPTIONS = {};
+
 const scaleControls = document.querySelector('.scale');
 const scaleControlValue = document.querySelector('.scale__control--value');
 const imageUploadPreview = document.querySelector('.img-upload__preview img');
@@ -15,14 +17,17 @@ const imageEffectSliderContainer = document.querySelector(
 );
 const imageEffectSlider = document.querySelector('.effect-level__slider');
 const effectsList = document.querySelector('.effects__list');
+const defaultEffect = document.querySelector('.effects__radio[value="none"]');
 
 const setImageUploadPreviewStyle = (style = '', property = 'filter') => {
   imageUploadPreview.style[property] = style;
 };
 
+let currentEffect = 'none';
+
 const updateScale = (scale) => {
   scaleControlValue.value = `${scale}%`;
-  imageUploadPreview.style.transform = `scale(${scale / 100})`;
+  imageUploadPreview.style.transform = `scale(${scale / ScaleRequirements.MAX})`;
 };
 
 const initializeImageFormScale = ({ signal }) => {
@@ -30,6 +35,7 @@ const initializeImageFormScale = ({ signal }) => {
     'click',
     (evt) => {
       const currentScale = parseInt(scaleControlValue.value, 10);
+
       if (evt.target.classList.contains('scale__control--smaller')) {
         if (currentScale <= ScaleRequirements.MIN) {
           return;
@@ -80,7 +86,6 @@ noUiSlider.create(imageEffectSlider, {
 
 imageEffectSlider.noUiSlider.on('update', () => {
   const value = imageEffectSlider.noUiSlider.get();
-  const currentEffect = document.querySelector('.effects__radio:checked').value;
 
   setEffectLevelValue(value);
 
@@ -118,11 +123,11 @@ const initializeImageFormEffects = ({ signal }) => {
   effectsList.addEventListener(
     'change',
     (evt) => {
-      const effect = evt.target.value;
+      currentEffect = evt.target.value;
 
-      toggleImageEffectSliderContainer(effect !== 'none');
+      toggleImageEffectSliderContainer(currentEffect !== 'none');
 
-      switch (effect) {
+      switch (currentEffect) {
         case 'chrome':
         case 'sepia':
           imageEffectSlider.noUiSlider.updateOptions({
@@ -169,8 +174,8 @@ const initializeImageFormEffects = ({ signal }) => {
           break;
 
         default:
-          imageUploadPreview.style.filter = '';
-          effectLevelValue.value = 0;
+          setImageUploadPreviewStyle();
+          setEffectLevelValue();
       }
     },
     { signal },
@@ -178,18 +183,24 @@ const initializeImageFormEffects = ({ signal }) => {
 };
 
 const initializeImageEditorForm = ({ signal }) => {
+  currentEffect = 'none';
+
   toggleImageEffectSliderContainer();
   setImageUploadPreviewStyle();
   setEffectLevelValue();
+
   initializeImageFormScale({ signal });
   initializeImageFormEffects({ signal });
 };
 
 const resetImageEditorForm = () => {
+  currentEffect = 'none';
+
   updateScale(ScaleRequirements.START);
   setImageUploadPreviewStyle();
   setEffectLevelValue();
-  document.querySelector('.effects__radio[value="none"]').checked = true;
+
+  defaultEffect.checked = true;
   toggleImageEffectSliderContainer();
 };
 
