@@ -5,8 +5,6 @@ const ScaleRequirements = {
   START: 100,
 };
 
-const EFFECT_OPTIONS = {};
-
 const scaleControls = document.querySelector('.scale');
 const scaleControlValue = document.querySelector('.scale__control--value');
 const imageUploadPreview = document.querySelector('.img-upload__preview img');
@@ -62,13 +60,14 @@ const setEffectLevelValue = (value = 0) => {
   effectLevelValue.value = value;
 };
 
+const getEffectOptions = ({ min = 0, max = 1, start = 1, step = 0.1 } = {}) => ({
+  range: { min, max },
+  start,
+  step
+});
+
 noUiSlider.create(imageEffectSlider, {
-  range: {
-    min: 0,
-    max: 1,
-  },
-  start: 1,
-  step: 0.1,
+  ...getEffectOptions(),
   connect: 'lower',
 
   format: {
@@ -130,47 +129,19 @@ const initializeImageFormEffects = ({ signal }) => {
       switch (currentEffect) {
         case 'chrome':
         case 'sepia':
-          imageEffectSlider.noUiSlider.updateOptions({
-            range: {
-              min: 0,
-              max: 1,
-            },
-            start: 1,
-            step: 0.1,
-          });
+          imageEffectSlider.noUiSlider.updateOptions(getEffectOptions());
           break;
 
         case 'marvin':
-          imageEffectSlider.noUiSlider.updateOptions({
-            range: {
-              min: 0,
-              max: 100,
-            },
-            start: 100,
-            step: 1,
-          });
+          imageEffectSlider.noUiSlider.updateOptions(getEffectOptions({ max: 100, start: 100, step: 1 }));
           break;
 
         case 'phobos':
-          imageEffectSlider.noUiSlider.updateOptions({
-            range: {
-              min: 0,
-              max: 3,
-            },
-            start: 3,
-            step: 0.1,
-          });
+          imageEffectSlider.noUiSlider.updateOptions(getEffectOptions({ max: 3, start: 3 }));
           break;
 
         case 'heat':
-          imageEffectSlider.noUiSlider.updateOptions({
-            range: {
-              min: 1,
-              max: 3,
-            },
-            start: 3,
-            step: 0.1,
-          });
+          imageEffectSlider.noUiSlider.updateOptions(getEffectOptions({ min: 1, max: 3, start: 3 }));
           break;
 
         default:
